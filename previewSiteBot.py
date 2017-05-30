@@ -32,6 +32,7 @@ class PreviewSiteBot():
     def get_comments(self, submissions):
         comments = []
         for submission in submissions:
+            submission.comments.replace_more(limit=0)
             comment_queue = submission.comments[:]
             while comment_queue:
                 comment = comment_queue.pop(0)
@@ -46,8 +47,13 @@ class PreviewSiteBot():
 
     def run(self):
         try:
-            submissions = list(self.reddit.subreddit(config.subreddit).new(limit=limit))
+            print "Getting submissions...",
+            submissions = list(self.reddit.subreddit(config.subreddit).hot(limit=limit))
+            print "Done! Found %s submissions" % len(submissions)
+            print "Getting comments...",
             comments = self.get_comments(submissions)
+            print "Done!"
+            print "Checking %s comments..." % len(comments)
             for comment in comments:
                 body = comment.body.lower()
                 has_keyword = any(k in body for k in config.keywords)
@@ -68,11 +74,10 @@ class PreviewSiteBot():
                                     full url addresses like http://reddit.com.\
                                     Brought to you by PreviewSiteBot v1.0!"
 
-                        print "Posting reply..."
+                        print "Posting reply...",
                         comment.reply(response)
-
                         done.add(comment.id)
-                        print "Screenshot posted"
+                        print "Done!"
                     except Exception as e:
                         print "======================="
                         print "Error:", e
@@ -89,8 +94,8 @@ class PreviewSiteBot():
 if __name__ == '__main__':
 
     done = set()
-    limit = 75      #Max number of submissions
-    delay = 600     #Set intervals in sec
+    limit = 25      #Max number of submissions
+    delay = 30     #Set intervals in sec
 
     p = PreviewSiteBot()
 
