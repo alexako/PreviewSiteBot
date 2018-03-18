@@ -28,6 +28,12 @@ params = {
 
 if __name__ == '__main__':
     import pyperclip
+    import sys
+
+    url = 'http://reddit.com'
+    if len(sys.argv) > 1:
+        url = sys.argv[1]
+
     access_key = config.access_key
     secret_keyword = config.secret_keyword
 
