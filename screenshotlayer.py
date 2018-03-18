@@ -27,8 +27,10 @@ params = {
 }
 
 if __name__ == '__main__':
+    import pyperclip
     access_key = config.access_key
     secret_keyword = config.secret_keyword
-    url = 'http://reddit.com'
 
-    print screenshotlayer(access_key, secret_keyword, url, params)
+    response = screenshotlayer(access_key, secret_keyword, url, {})
+    pyperclip.copy(response)
+    print response
